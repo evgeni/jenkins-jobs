@@ -106,7 +106,9 @@ pipeline {
                     stage('assets-precompile') {
                         steps {
                             dir('foreman') {
-                                filter_package_json(ruby)
+                                if (ghprbTargetBranch == 'master') {
+                                    filter_package_json(ruby)
+                                }
 
                                 sh(script: "cp db/schema.rb.nulldb db/schema.rb", label: "copy nulldb schema")
                                 withRVM(["bundle exec npm install --package-lock-only --no-audit"], ruby)
